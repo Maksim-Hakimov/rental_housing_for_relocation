@@ -11,6 +11,7 @@ place_ns = Namespace('places')
 class PlaceView(Resource):
     def get(self):
         filter_city = request.args.get('city')
+
         price_from = request.args.get('from')
         if price_from == "":
             price_from = 1
@@ -19,14 +20,12 @@ class PlaceView(Resource):
         if price_to == "":
             price_to = 1000
 
+        if filter_city and price_from and price_to is not None and filter_city != '':
+            return PlaceSchema(many=True).dump(place_service.get_by_city_and_price(filter_city, price_from, price_to))
         if filter_city is not None and filter_city != '':
-            result = PlaceSchema(many=True).dump(place_service.
-                                                 get_by_city_and_price(filter_city, price_from, price_to))
-            return result
-
+            return PlaceSchema(many=True).dump(place_service.get_by_city(filter_city))
         if price_from and price_to is not None:
-            result = PlaceSchema(many=True).dump(place_service.get_by_price(price_from, price_to))
-            return result
+            return PlaceSchema(many=True).dump(place_service.get_by_price(price_from, price_to))
 
         places = place_service.get_all()
         result = PlaceSchema(many=True).dump(places)
