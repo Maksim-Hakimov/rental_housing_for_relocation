@@ -1,3 +1,5 @@
+from sqlalchemy import and_
+
 from dao.model.place import Place
 
 
@@ -18,5 +20,5 @@ class PlaceDAO:
         return self.session.query(Place).filter(Place.price.between(price_from, price_to)).all()
 
     def get_by_city_and_price(self, city, price_from, price_to):
-        return self.session.query(Place).filter(Place.city == city and
-                                                Place.price.between(price_from, price_to)).all()
+        return self.session.query(Place).filter(and_(Place.city == city,
+                                                Place.price.between(price_from, price_to))).all()
