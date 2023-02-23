@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restx import Api
+from flask_cors import CORS
 
 from setup_db import db
 from config import Config
@@ -46,4 +47,10 @@ def error_500(error):
     return f"Internal Server Error. Error: {error}", 500
 
 
-app.run(port=8008)
+CORS(app)
+cors = CORS(resources={
+    r"/*": {"origins": '*'}
+})
+
+if __name__ == '__main__':
+    app.run(port=8008)

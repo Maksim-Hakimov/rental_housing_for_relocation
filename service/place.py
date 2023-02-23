@@ -9,7 +9,15 @@ class PlaceService:
         return self.dao.get_one(pid)
 
     def get_all(self):
-        return self.dao.get_all()
+        data = self.dao.get_all()
+        for key, value in data:
+            if key == "features_on":
+                data[key] = value.split(",")
+
+        for key, value in data:
+            if key == "features_off":
+                data[key] = value.split(",")
+        return data
 
     def get_by_city(self, city):
         return self.dao.get_by_city(city)
